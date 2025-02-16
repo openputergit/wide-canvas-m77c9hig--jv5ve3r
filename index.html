@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>तुमचं पीक आमचं कर्तव्य | हार्वेस्टर बुकिंग</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .neu-brutal {
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0 #000;
+            transition: all 0.2s ease;
+        }
+        
+        .neu-brutal:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 #000;
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="bg-[#f9d51f]/10">
+    <div class="loading" id="loading">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-[#51cc24]"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="p-4 bg-white neu-brutal m-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <img src="https://firebasestorage.googleapis.com/v0/b/widecanvas-d0dd4.appspot.com/o/logos%2Flogo.png?alt=media&token=f84f1112-577e-4c66-a0b9-0ad8bb27db63" alt="Logo" class="h-12">
+                <h1 class="text-xl font-bold">तुमचं पीक आमचं कर्तव्य</h1>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="showPage('login')" class="neu-brutal bg-[#f9d51f] px-6 py-2">लॉगिन</button>
+                <button onclick="showPage('register')" class="neu-brutal bg-[#51cc24] px-6 py-2 text-white">नोंदणी</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Pages -->
+    <main class="container mx-auto p-4">
+        <!-- Landing Page -->
+        <div id="landing" class="grid md:grid-cols-2 gap-8 items-center min-h-[80vh]">
+            <div class="space-y-6">
+                <h1 class="text-4xl font-bold">हार्वेस्टर बुकिंग सेवा</h1>
+                <p class="text-xl">आपल्या शेतीसाठी सर्वोत्तम हार्वेस्टर सेवा</p>
+                <button onclick="showPage('register')" class="neu-brutal bg-[#51cc24] px-8 py-3 text-white text-lg">आताच नोंदणी करा</button>
+            </div>
+            <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1000" alt="Harvester" class="neu-brutal w-full">
+        </div>
+
+        <!-- Registration Form -->
+        <div id="register" class="hidden max-w-md mx-auto">
+            <form onsubmit="handleRegister(event)" class="neu-brutal bg-white p-6 space-y-4">
+                <h2 class="text-2xl font-bold text-center">नवीन नोंदणी</h2>
+                <div>
+                    <label class="block mb-1">नाव</label>
+                    <input required type="text" id="reg-name" class="neu-brutal w-full p-2" placeholder="संपूर्ण नाव">
+                </div>
+                <div>
+                    <label class="block mb-1">मोबाईल नंबर</label>
+                    <input required type="tel" id="reg-mobile" class="neu-brutal w-full p-2" placeholder="मोबाईल नंबर" pattern="[0-9]{10}">
+                </div>
+                <div>
+                    <label class="block mb-1">जन्मतारीख</label>
+                    <input required type="date" id="reg-dob" class="neu-brutal w-full p-2">
+                </div>
+                <button type="submit" class="neu-brutal bg-[#51cc24] text-white w-full py-2">नोंदणी करा</button>
+            </form>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login" class="hidden max-w-md mx-auto">
+            <form onsubmit="handleLogin(event)" class="neu-brutal bg-white p-6 space-y-4">
+                <h2 class="text-2xl font-bold text-center">लॉगिन</h2>
+                <div>
+                    <label class="block mb-1">मोबाईल नंबर</label>
+                    <input required type="tel" id="login-mobile" class="neu-brutal w-full p-2" placeholder="नोंदणीकृत मोबाईल नंबर" pattern="[0-9]{10}">
+                </div>
+                <button type="submit" class="neu-brutal bg-[#f9d51f] w-full py-2">लॉगिन करा</button>
+            </form>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="hidden space-y-6">
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="showPage('newBooking')" class="neu-brutal bg-white p-6 text-center">
+                    <i class="bi bi-plus-circle text-4xl text-[#51cc24]"></i>
+                    <h3 class="text-xl mt-2">नवीन बुकिंग</h3>
+                </button>
+                <button onclick="showPage('bookingHistory')" class="neu-brutal bg-white p-6 text-center">
+                    <i class="bi bi-clock-history text-4xl text-[#f9d51f]"></i>
+                    <h3 class="text-xl mt-2">बुकिंग इतिहास</h3>
+                </button>
+            </div>
+        </div>
+
+        <!-- New Booking Form -->
+        <div id="newBooking" class="hidden max-w-md mx-auto">
+            <form onsubmit="handleBooking(event)" class="neu-brutal bg-white p-6 space-y-4">
+                <h2 class="text-2xl font-bold text-center">नवीन बुकिंग</h2>
+                <div>
+                    <label class="block mb-1">गाव</label>
+                    <input required type="text" id="booking-village" class="neu-brutal w-full p-2" placeholder="गावाचे नाव">
+                </div>
+                <div>
+                    <label class="block mb-1">तारीख</label>
+                    <input required type="date" id="booking-date" class="neu-brutal w-full p-2">
+                </div>
+                <div>
+                    <label class="block mb-1">पीक</label>
+                    <select required id="booking-crop" class="neu-brutal w-full p-2">
+                        <option value="">पीक निवडा</option>
+                        <option value="wheat">गहू</option>
+                        <option value="rice">तांदूळ</option>
+                        <option value="soyabean">सोयाबीन</option>
+                        <option value="toor">तूर</option>
+                        <option value="chana">चना</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block mb-1">क्षेत्र (एकर)</label>
+                    <input required type="number" id="booking-area" class="neu-brutal w-full p-2" placeholder="एकर मध्ये क्षेत्र">
+                </div>
+                <button type="submit" class="neu-brutal bg-[#51cc24] text-white w-full py-2">बुक करा</button>
+            </form>
+        </div>
+
+        <!-- Booking History -->
+        <div id="bookingHistory" class="hidden">
+            <div class="neu-brutal bg-white p-6">
+                <h2 class="text-2xl font-bold mb-4">बुकिंग इतिहास</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b-2 border-black">
+                                <th class="p-2 text-left">तारीख</th>
+                                <th class="p-2 text-left">गाव</th>
+                                <th class="p-2 text-left">पीक</th>
+                                <th class="p-2 text-left">क्षेत्र</th>
+                                <th class="p-2 text-left">स्थिती</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingHistoryTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const userId = localStorage.getItem('userId') || 'user_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('userId', userId);
+        
+        const appSlug = 'harvester-booking-123456';
+        const loading = document.getElementById('loading');
+
+        function showLoading() {
+            loading.style.display = 'flex';
+        }
+
+        function hideLoading() {
+            loading.style.display = 'none';
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            if(pageId === 'bookingHistory') {
+                loadBookingHistory();
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            showLoading();
+            
+            const data = {
+                name: document.getElementById('reg-name').value,
+                mobile: document.getElementById('reg-mobile').value,
+                dob: document.getElementById('reg-dob').value
+            };
+
+            try {
+                const response = await fetch('https://r0c8kgwocscg8gsokogwwsw4.zetaverse.one/mongodb', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer X8oZoKTZdcQ04clMDq3ha2xhIGA2',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        appSlug,
+                        action: 'create',
+                        collection: 'users',
+                        data: {
+                            ...data,
+                            userId
+                        }
+                    })
+                });
+
+                if(response.ok) {
+                    alert('नोंदणी यशस्वी झाली!');
+                    showPage('dashboard');
+                } else {
+                    alert('नोंदणी करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+                }
+            } catch(error) {
+                alert('काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            showLoading();
+            
+            const mobile = document.getElementById('login-mobile').value;
+
+            try {
+                const response = await fetch('https://r0c8kgwocscg8gsokogwwsw4.zetaverse.one/mongodb', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer X8oZoKTZdcQ04clMDq3ha2xhIGA2',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        appSlug,
+                        action: 'read',
+                        collection: 'users',
+                        conditions: { mobile }
+                    })
+                });
+
+                const data = await response.json();
+                
+                if(data.result && data.result.length > 0) {
+                    localStorage.setItem('userId', data.result[0].userId);
+                    showPage('dashboard');
+                } else {
+                    alert('अवैध मोबाईल नंबर. कृपया नोंदणी करा.');
+                    showPage('register');
+                }
+            } catch(error) {
+                alert('काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function handleBooking(event) {
+            event.preventDefault();
+            showLoading();
+            
+            const bookingData = {
+                userId,
+                village: document.getElementById('booking-village').value,
+                date: document.getElementById('booking-date').value,
+                crop: document.getElementById('booking-crop').value,
+                area: document.getElementById('booking-area').value,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch('https://r0c8kgwocscg8gsokogwwsw4.zetaverse.one/mongodb', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer X8oZoKTZdcQ04clMDq3ha2xhIGA2',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        appSlug,
+                        action: 'create',
+                        collection: 'bookings',
+                        data: bookingData
+                    })
+                });
+
+                if(response.ok) {
+                    alert('बुकिंग यशस्वी झाली!');
+                    showPage('bookingHistory');
+                } else {
+                    alert('बुकिंग करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+                }
+            } catch(error) {
+                alert('काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function loadBookingHistory() {
+            showLoading();
+            
+            try {
+                const response = await fetch('https://r0c8kgwocscg8gsokogwwsw4.zetaverse.one/mongodb', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer X8oZoKTZdcQ04clMDq3ha2xhIGA2',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        appSlug,
+                        action: 'read',
+                        collection: 'bookings',
+                        conditions: { userId }
+                    })
+                });
+
+                const data = await response.json();
+                
+                const tbody = document.getElementById('bookingHistoryTable');
+                tbody.innerHTML = '';
+
+                if(data.result && data.result.length > 0) {
+                    data.result.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(booking => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'border-b border-black/20';
+                        tr.innerHTML = `
+                            <td class="p-2">${new Date(booking.date).toLocaleDateString('mr-IN')}</td>
+                            <td class="p-2">${booking.village}</td>
+                            <td class="p-2">${booking.crop}</td>
+                            <td class="p-2">${booking.area} एकर</td>
+                            <td class="p-2">
+                                <span class="px-2 py-1 rounded ${
+                                    booking.status === 'pending' ? 'bg-yellow-200' : 
+                                    booking.status === 'confirmed' ? 'bg-green-200' :
+                                    'bg-red-200'
+                                }">
+                                    ${
+                                        booking.status === 'pending' ? 'प्रलंबित' :
+                                        booking.status === 'confirmed' ? 'पुष्टी झाली' :
+                                        'रद्द'
+                                    }
+                                </span>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center">कोणतीही बुकिंग आढळली नाही</td></tr>';
+                }
+            } catch(error) {
+                alert('बुकिंग इतिहास लोड करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+            } finally {
+                hideLoading();
+            }
+        }
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
